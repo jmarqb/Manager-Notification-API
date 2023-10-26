@@ -23,7 +23,7 @@ export class GmailController {
 
   @Post('sendEmail')
   @ApiOperation({ summary: 'Send an email using Gmail' })
-  @ApiResponse({ status: 200, description: 'Email sent successfully' })
+  @ApiResponse({ status: 201, description: 'Email sent successfully' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @ApiBody({
     description: 'Email Data',
