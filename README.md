@@ -9,10 +9,11 @@
 4. [Installation](#installation)
 5. [Configuration](#configuration)
 6. [Running the Application](#running-the-application)
-7. [Docker Stack](#docker-stack)
-8. [Test](#test)
-9. [API Documentation](#api-documentation)
-10. [Contact & Follow](#contact-&-follow)
+7. [First Steps](#first-steps)
+8. [Docker Stack](#docker-stack)
+9. [Test](#test)
+10. [API Documentation](#api-documentation)
+11. [Contact & Follow](#contact-&-follow)
 
 ### General Info
 ***
@@ -95,6 +96,25 @@ For Example: `http://localhost:3000/api/doc`
 
 We recommend you visit the section [API Documentation](#api-documentation)
 
+## First Steps:
+
+Before you can interact with most of the endpoints in this API, it's essential to recommend some steps to facilitate the user's interaction:
+
+1. **Token Generation:**
+ To ensure you are using valid tokens in your tests, first use the token generation endpoint we provide.
+ This Endpoint is exclusively for development purposes to generate a valid token for testing other endpoints. It is strongly recommended to disable this endpoint in any other environment than development.
+  
+  * `POST /api/auth/test-token`
+
+2. **Authentication with Gmail** (If you choose "gmail" as your email provider)
+If you decide to use Gmail as your email provider, before interacting with any other endpoint, make sure to authenticate with the provided Google account for testing:
+
+  * `GET /api/gmail/google/auth`
+
+This will redirect you to a Google authentication page. Use the credentials of the provided test Gmail account.
+
+With these steps set up, you are ready to use all the other endpoints of the API.
+
 
 ## Docker Stack
 
@@ -124,6 +144,8 @@ docker-compose up --build
 This will start the server and the application will be available at http://localhost:<your_port>
 
 For Example: `http://localhost:3000/api/doc`
+
+We recommend you visit the section [First Steps](#first-steps)
 
 ## Test
 
