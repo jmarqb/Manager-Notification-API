@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Nginx 
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    ports:
+      - "${PORT}:80"
+    volumes:
+      - ./nginx/default.template:/etc/nginx/conf.d/default.template:ro
+    command: /bin/sh -c "envsubst '$$PORT' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    environment:
+      - PORT=${PORT}
+    depends_on:
+      - app
+
+  # App
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: nest_app
+    env_file:
+      - .env
+    environment:
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_HOST=redis
+      - PORT=${PORT}
+      - MONGODB_CNN=mongodb://mongodb:27017/${MONGO_DATABASE}
+    command: ["./wait-for-it.sh", "mongodb:27017", "--", "./wait-for-it.sh", "redis:6379", "--", "npm", "start"]
+    volumes:
+      - ./wait-for-it.sh:/usr/src/app/wait-for-it.sh:ro
+    depends_on:
+      - mongodb
+      - redis
+
+  # MongoDB
+  mongodb:
+    image: mongo:6.0.1
+    container_name: mongodb_container
+    ports:
+      - "${MONGO_PORT}:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  # Redis
+  redis:
+    image: redis:alpine
+    container_name: redis_container
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  mongodb_data:
+  redis_data:
